@@ -3,7 +3,7 @@ const axios = require('axios');
 const http = require('http');
 
 // ඔයාගේ Bot Token එක මෙතනට දාන්න
-const token = 'YOUR_TELEGRAM_BOT_TOKEN';
+const token = '8602389613:AAG1xO0ruP996URKCEu5kWYZpAnRsB9bxHI';
 const bot = new TelegramBot(token, { polling: true });
 
 // 💡 Render එකේ බොට් එක Sleep වෙන්නේ නැති වෙන්න හදන පොඩි සර්වර් එකක්
