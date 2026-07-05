@@ -1,20 +1,30 @@
 const TelegramBot = require('node-telegram-bot-api');
 const axios = require('axios');
+const http = require('http');
 
-// ඔයාගේ Bot Token එක මෙතනට දාන්න (උඩුකමා ඇතුළට)
-const token = '8602389613:AAG1xO0ruP996URKCEu5kWYZpAnRsB9bxHI';
+// ඔයාගේ Bot Token එක මෙතනට දාන්න
+const token = 'YOUR_TELEGRAM_BOT_TOKEN';
 const bot = new TelegramBot(token, { polling: true });
 
+// 💡 Render එකේ බොට් එක Sleep වෙන්නේ නැති වෙන්න හදන පොඩි සර්වර් එකක්
+const server = http.createServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Bot is running smoothly!\n');
+});
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+    console.log(`Web server is listening on port ${PORT}`);
+});
+
+// Inline සර්ච් එක වැඩ කරන කොටස
 bot.on('inline_query', async (query) => {
     const queryText = query.query.trim();
     if (!queryText) return;
 
     try {
-        // Pornhub Web API එකෙන් සර්ච් කිරීම
         const response = await axios.get(`https://www.pornhub.com/webapi/search?search=${encodeURIComponent(queryText)}`);
         const videos = response.data.items || [];
 
-        // මුල් වීඩියෝ 5ක් පමණක් තෝරාගැනීම
         const results = videos.slice(0, 5).map((video, index) => {
             return {
                 type: 'article',
@@ -25,7 +35,7 @@ bot.on('inline_query', async (query) => {
                     parse_mode: 'Markdown'
                 },
                 thumb_url: video.thumb,
-                description: `දන්නා කාලය: ${video.duration || 'N/A'}`
+                description: `Duration: ${video.duration || 'N/A'}`
             };
         });
 
